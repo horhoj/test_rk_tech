@@ -1,0 +1,47 @@
+.CatRenderSCSSModules {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.button {
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  background-color: cadetblue;
+  color: #fff;
+  &[disabled] {
+    background-color: gray;
+    cursor: auto;
+  }
+
+  &.buttonActive {
+    background-color: darkmagenta;
+  }
+}
+
+
+
+.btnsWrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.catImg {
+  width: 500px;
+  border-radius: 16px;
+
+}
+
+.checked {
+  width: 20px;
+  height: 20px;
+}
+
+.checkedLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}

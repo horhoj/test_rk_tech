@@ -3,9 +3,11 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import * as rp from 'redux-persist';
 import { settingsReducer } from './settingsSlice';
+import { randomCatReducer } from '~/randomCat/randomCatSlice';
 
 const reducers = combineReducers({
   settings: settingsReducer,
+  randomCat: randomCatReducer,
 });
 
 const persistedReducer = persistReducer(
