@@ -1,11 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { randomCatSlice } from '~/randomCat/randomCatSlice';
-import { CatRenderTech } from '~/randomCat/types';
+import { CatRenderContract, CatRenderTech } from '~/randomCat/types';
 import { CatRenderCSSModules } from '~/randomCat/CatRenders/CatRenderCSSModules';
 import { Spinner } from '~/ui/Spinner';
 import { CatRenderSCSSModules } from '~/randomCat/CatRenders/CatRenderSCSSModules';
 import { CatRenderStyledComponents } from '~/randomCat/CatRenders/CatRenderStyledComponents';
+
+const renderDictionary: Record<CatRenderTech, (props: CatRenderContract) => ReactNode> = {
+  'CSS-MODULES': CatRenderCSSModules,
+  STYLED: CatRenderStyledComponents,
+  'SCSS-MODULES': CatRenderSCSSModules,
+};
 
 const REFRESH_TIMEOUT = 5000;
 
@@ -47,51 +53,23 @@ export function RandomCatWidget() {
     setRefreshCat((prev) => prev + 1);
   };
 
+  const RenderComponent = renderDictionary[renderTech];
+
   return (
     <>
       <Spinner isShow={isLoading} />
-      {renderTech === 'CSS-MODULES' && (
-        <CatRenderCSSModules
-          renderTech={renderTech}
-          changeRenderChange={setRenderTech}
-          enabled={enabled}
-          isLoading={isLoading}
-          changeEnabled={setIsEnabled}
-          autoRefresh={autoRefresh}
-          changeAutoRefresh={setIsAutoRefresh}
-          getCat={handleGetCat}
-          catUrl={data === null ? null : data.url}
-          fetchError={error}
-        />
-      )}
-      {renderTech === 'SCSS-MODULES' && (
-        <CatRenderSCSSModules
-          renderTech={renderTech}
-          changeRenderChange={setRenderTech}
-          enabled={enabled}
-          isLoading={isLoading}
-          changeEnabled={setIsEnabled}
-          autoRefresh={autoRefresh}
-          changeAutoRefresh={setIsAutoRefresh}
-          getCat={handleGetCat}
-          catUrl={data === null ? null : data.url}
-          fetchError={error}
-        />
-      )}
-      {renderTech === 'STYLED' && (
-        <CatRenderStyledComponents
-          renderTech={renderTech}
-          changeRenderChange={setRenderTech}
-          enabled={enabled}
-          isLoading={isLoading}
-          changeEnabled={setIsEnabled}
-          autoRefresh={autoRefresh}
-          changeAutoRefresh={setIsAutoRefresh}
-          getCat={handleGetCat}
-          catUrl={data === null ? null : data.url}
-          fetchError={error}
-        />
-      )}
+      <RenderComponent
+        renderTech={renderTech}
+        changeRenderChange={setRenderTech}
+        enabled={enabled}
+        isLoading={isLoading}
+        changeEnabled={setIsEnabled}
+        autoRefresh={autoRefresh}
+        changeAutoRefresh={setIsAutoRefresh}
+        getCat={handleGetCat}
+        catUrl={data === null ? null : data.url}
+        fetchError={error}
+      />
     </>
   );
 }
